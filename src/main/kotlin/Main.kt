@@ -8,16 +8,24 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun main() {
-    embeddedServer(Netty, port = 8080) {
+
+    val port = System.getenv("PORT")?.toInt() ?: 8080
+
+    embeddedServer(Netty, port = port) {
         routing {
+
             post("/webhook") {
                 val body = call.receiveText()
                 println("Webhook Received: $body")
                 call.respondText("EVENT_RECEIVED")
             }
+
             get("/") {
                 call.respondText("Server running")
             }
         }
     }.start(wait = true)
 }
+
+
+
